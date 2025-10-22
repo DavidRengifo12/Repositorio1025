@@ -97,7 +97,10 @@ export default function Login() { //REAJUSTAR ESTILOS
                   </Form.Group>
 
                   <div className="d-grid">
-                    <Button type="submit" size='lg'  style={{background: '#4E73DF'}}>Entrar</Button>
+                    <Button type="submit"
+                      size='lg'
+                      className='px-5 rounded-pill'
+                      style={{ background: '#4E73DF', border: 'none' }}>Entrar</Button>
                   </div>
                 </Form>
 

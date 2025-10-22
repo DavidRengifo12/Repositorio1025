@@ -3,7 +3,8 @@ import { Button, Card, Col, Container, Form, Row, InputGroup } from 'react-boots
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FiMail, FiPhone, FiLock, FiCalendar, FiUser } from 'react-icons/fi'
-import { registerUser } from '../services/registerService'
+//import { registerUser } from '../services/registerService'
+import supabase from '../Supabase'
 
 export default function Register() {
   const [primerApellido, setPrimerApellido] = useState("")
@@ -12,38 +13,48 @@ export default function Register() {
   const [genero, setGenero] = useState("")
   const [fechaNacimiento, setFechaNacimiento] = useState("")
   const [tipoDocumento, setTipoDocumento] = useState("")
-  const [documento, setDocumento] = useState("") // nuevo
+  const [documento, setDocumento] = useState("") 
   const [telefono, setTelefono] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [rol] = useState("pasajeros")
 
   const navigate = useNavigate()
 
   const handleRegister = async (e) => {
     e.preventDefault()
-
-    const { user, error } = await registerUser({
-      email,
-      password,
-      nombres,
-      primerApellido,
-      segundoApellido,
-      genero,
-      fechaNacimiento,
-      tipoDocumento,
-      telefono,
-      documento
-    })
-
-    if (error) {
-      toast.error(" Error al registrarse, revise los datos o intente nuevamente")
-      return
+    try {
+      const {data, error} = await supabase.auth.signUp({
+        email,
+        password,
+        options:{
+          data: {
+            primerApellido,
+            segundoApellido,
+            nombres,
+            genero,
+            fechaNacimiento,
+            tipoDocumento,
+            documento,
+            telefono, 
+            rol
+          }
+        }
+      })
+      console.log(data)
+      console.error(error)
+      if(error){
+        toast.error('Error al registrarte, intenta de nuevo')
+      }
+      if(data.user){
+        toast.success('registro exitoso')
+        navigate('/')
+      }
+    }catch(error){
+      console.log('error al registrarse', error)
+      toast.error('Ocurrio un error al registrarte, intenta de nuevo')
     }
-
-    if (user) {
-      toast.success(" Registro exitoso")
-      navigate('/dash-user')
-    }
+    
   }
 
   return (
@@ -107,6 +118,20 @@ export default function Register() {
                           />
                         </InputGroup>
                       </Form.Group>
+
+                      <Form.Group className='mb-3'>
+                        <Form.Label>Email</Form.Label>
+                        <InputGroup>
+                          <InputGroup.Text><FiMail /></InputGroup.Text>
+                          <Form.Control
+                            type='email'
+                            placeholder='Ingrese su correo electrónico'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                          />
+                        </InputGroup>
+                      </Form.Group>
                     </Col>
 
                     {/* Columna Derecha */}
@@ -163,25 +188,6 @@ export default function Register() {
                         </InputGroup>
                       </Form.Group>
 
-                      <Form.Group className='mb-3'>
-                        <Form.Label>Email</Form.Label>
-                        <InputGroup>
-                          <InputGroup.Text><FiMail /></InputGroup.Text>
-                          <Form.Control
-                            type='email'
-                            placeholder='Ingrese su correo electrónico'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-                  {/* Contraseña */}
-                  <Row className='justify-content-center'>
-                    <Col md={6}>
                       <Form.Group className='mb-4'>
                         <Form.Label>Password</Form.Label>
                         <InputGroup>
@@ -195,9 +201,12 @@ export default function Register() {
                           />
                         </InputGroup>
                       </Form.Group>
+
+                      
                     </Col>
                   </Row>
 
+                 
                   {/* Botón */}
                   <div className='text-center'>
                     <Button
