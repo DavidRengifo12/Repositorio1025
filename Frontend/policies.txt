@@ -1,0 +1,259 @@
+--POLICIE # 1
+-- Aqui permitimos al usuario crear su perfil
+DROP POLICY IF EXISTS usuarios_insert_own ON usuarios;
+CREATE POLICY usuarios_insert_own
+  ON usuarios
+  FOR INSERT
+  WITH CHECK (
+    auth.uid() = id
+    -- estos campos son obligatorios a la hora de que un usuario vaya a crear su perfil
+    AND COALESCE(nombres, '') <> ''
+    AND COALESCE(primerApellido, '') <> ''
+    AND COALESCE(segundoApellido, '') <> ''
+  );
+
+-- para que el usuario vea su registro
+DROP POLICY IF EXISTS usuarios_select_own ON usuarios;
+CREATE POLICY usuarios_select_own
+  ON usuarios
+  FOR SELECT
+  USING (auth.uid() = id);
+
+-- puede actualizar datos mas no se puede camniar el rol
+DROP POLICY IF EXISTS usuarios_update_own ON usuarios;
+CREATE POLICY usuarios_update_own
+  ON usuarios
+  FOR UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (
+    auth.uid() = id
+    -- aqui validamos que el usuario no vaya a camniar su rol
+    AND (rol IS NULL OR rol = (SELECT rol FROM usuarios WHERE id = auth.uid()))
+  );
+
+-- aqui permitimos que el admin pueda ver todos los usuarios registrados
+DROP POLICY IF EXISTS usuarios_select_admin ON usuarios;
+CREATE POLICY usuarios_select_admin
+  ON usuarios
+  FOR SELECT
+  USING (
+    EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+
+--POLICIE # 2
+
+-- Politica para que el admin pueda acceder al crud de los vuelos
+DROP POLICY IF EXISTS vuelos_select_public ON vuelos;
+CREATE POLICY vuelos_select_public
+  ON vuelos
+  FOR SELECT
+  USING (true);
+
+DROP POLICY IF EXISTS vuelos_admin_all ON vuelos;
+CREATE POLICY vuelos_admin_all
+  ON vuelos
+  FOR ALL
+  USING (
+    EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  )
+  WITH CHECK (
+    EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+
+--POLICIE # 3
+
+DROP POLICY IF EXISTS reservas_insert_own ON reservas;
+CREATE POLICY reservas_insert_own
+  ON reservas
+  FOR INSERT
+  WITH CHECK (
+    -- aqui verificamos que el usuario autenticado sea el mismo de la reserva
+    auth.uid() = usuario_id
+
+    -- el usuario debe aceptar terminos
+    AND aceptar_terminos = TRUE
+
+    -- num_pasajeros entre 1 y 5
+    AND num_pasajeros BETWEEN 1 AND 5
+
+    -- la fecha de salida del vuelo debe estar entre hoy y maximo 2 meses
+    AND (
+      (SELECT v.fecha_salida FROM vuelos v WHERE v.id = vuelo_id)
+        BETWEEN current_date AND (current_date + INTERVAL '2 months')
+    )
+
+    -- verificar que la suma de sillas ocupadas + num_pasajeros <= capacidad del avion
+    (aqui lo que hacemos es validar si el numero  de sillas ocupadas y el numero de pasajaros sea menor o
+     igual a la capacidad del avion)
+    AND (
+      (SELECT COALESCE(COUNT(*),0) FROM asignacion_sillas asi
+         JOIN reservas r2 ON r2.id = asi.reserva_id
+         JOIN vuelos v2 ON v2.id = r2.vuelo_id
+       WHERE v2.id = vuelo_id
+      ) + num_pasajeros
+      <= (
+         SELECT a.numero_sillas FROM vuelos v3 JOIN avion a ON a.id = v3.avion_id WHERE v3.id = vuelo_id
+      )
+    )
+  );
+
+-- el administrador puede ver todas las reservas y el usuario puede ver su propia reserva
+DROP POLICY IF EXISTS reservas_select_own_admin ON reservas;
+CREATE POLICY reservas_select_own_admin
+  ON reservas
+  FOR SELECT
+  USING (
+    auth.uid() = usuario_id
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+-- el admin puede actualizar una reserva en caso de que un usuario tenga problemas con su reserva
+DROP POLICY IF EXISTS reservas_update_own_admin ON reservas;
+CREATE POLICY reservas_update_own_admin
+  ON reservas
+  FOR UPDATE
+  USING (
+    auth.uid() = usuario_id
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  )
+  WITH CHECK (
+    auth.uid() = usuario_id
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+-- el admin solo puede eliminar reservas
+DROP POLICY IF EXISTS reservas_delete_admin ON reservas;
+CREATE POLICY reservas_delete_admin
+  ON reservas
+  FOR DELETE
+  USING (
+    EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+
+--POLICIE #4
+-- CRUD manejado por el admin para las sillas en el avion
+DROP POLICY IF EXISTS sillas_select_public ON sillas;
+CREATE POLICY sillas_select_public
+  ON sillas
+  FOR SELECT
+  USING (true);
+
+DROP POLICY IF EXISTS sillas_admin_all ON sillas;
+CREATE POLICY sillas_admin_all
+  ON sillas
+  FOR ALL
+  USING (
+    EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  )
+  WITH CHECK (
+    EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+
+--POLICIE # 5
+
+
+DROP POLICY IF EXISTS asignacion_sillas_insert_own ON asignacion_sillas;
+CREATE POLICY asignacion_sillas_insert_own
+  ON asignacion_sillas
+  FOR INSERT
+  WITH CHECK (
+    -- la reserva debe pertenecer al usuario que manda la solicitud
+    (
+      EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+      OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+    )
+    -- la silla debe pertenecer al avion del vuelo de la reserva
+    AND EXISTS (
+      SELECT 1
+      FROM reservas r
+      JOIN vuelos v ON v.id = r.vuelo_id
+      JOIN sillas s ON s.avion_id = v.avion_id
+      WHERE r.id = reserva_id AND s.id = silla_id
+    )
+    -- la silla no debe estar ya asignada 
+    AND NOT EXISTS (SELECT 1 FROM asignacion_sillas asi WHERE asi.silla_id = silla_id)
+  );
+
+-- ver solo asignaciones propias o el admin tambien las puede ver
+DROP POLICY IF EXISTS asignacion_sillas_select_own_admin ON asignacion_sillas;
+CREATE POLICY asignacion_sillas_select_own_admin
+  ON asignacion_sillas
+  FOR SELECT
+  USING (
+    EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+-- el dueño o el admin puede quitar la asignacion de una silla en caso de error en la reserva
+DROP POLICY IF EXISTS asignacion_sillas_delete_own_admin ON asignacion_sillas;
+CREATE POLICY asignacion_sillas_delete_own_admin
+  ON asignacion_sillas
+  FOR DELETE
+  USING (
+    EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+
+
+--POLICIE # 6
+
+DROP POLICY IF EXISTS pago_insert_own ON pago_usuarios;
+CREATE POLICY pago_insert_own
+  ON pago_usuarios
+  FOR INSERT
+  WITH CHECK (
+    (
+      EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+      OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+    )
+    -- valor mínimo > 0
+    AND valor_pago > 0
+    -- método válido
+    AND metodo_pago IN ('Tarjeta Credito', 'PSE', 'Tarjeta Debito')
+  );
+
+DROP POLICY IF EXISTS pago_select_own_admin ON pago_usuarios;
+CREATE POLICY pago_select_own_admin
+  ON pago_usuarios
+  FOR SELECT
+  USING (
+    EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+-- actualizacion para cambiar el estado una vez el usuario haya pagado
+DROP POLICY IF EXISTS pago_update_own_admin ON pago_usuarios;
+CREATE POLICY pago_update_own_admin
+  ON pago_usuarios
+  FOR UPDATE
+  USING (
+    EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  )
+  WITH CHECK (
+    EXISTS (SELECT 1 FROM reservas r WHERE r.id = reserva_id AND r.usuario_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM usuarios u WHERE u.id = auth.uid() AND u.rol = 'administrador')
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
