@@ -5,7 +5,7 @@ import { FaPlaneDeparture, FaCheckCircle, FaTimesCircle, FaDollarSign } from 're
 const StatsCards = () => {
   // Datos simulados (deberían venir de una API en un proyecto real)
   const stats = [
-    { value: 45, label: 'Vuelos', icon: <FaPlaneDeparture className="text-primary fs-3" />, color: 'primary' },
+    { value: 45, label: 'Vueloss', icon: <FaPlaneDeparture className="text-primary fs-3" />, color: 'primary' },
     { value: 33, label: 'Flights Done', icon: <FaCheckCircle className="text-success fs-3" />, color: 'success' },
     { value: 12, label: 'Flights Cancelled', icon: <FaTimesCircle className="text-danger fs-3" />, color: 'danger' },
     { value: '10,205', label: 'Ingresos ($)', icon: <FaDollarSign className="text-warning fs-3" />, color: 'warning', currency: true },

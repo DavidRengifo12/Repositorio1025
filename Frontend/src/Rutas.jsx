@@ -40,7 +40,7 @@ const RutasWeb = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
-      <Route path="/navbar-user" element={<NavbarUser />} ></Route> {/*PROTEGER LAS RUTAS DEL DAHS */}
+      <Route path="/navbar-user" element={<NavbarUser />} ></Route> {/*PROTEGER LAS RUTAS DEssL DAHS */}
       <Route path="/dash-admin" element={<DashboardContent />} />
       <Route path="/admin-sidebar" element={<AdminLayout />} />
       <Route path="/cards" element={<StatsCards />} />

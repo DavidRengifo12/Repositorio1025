@@ -37,7 +37,7 @@ const GestionarVuelos = () => {
           {/* Cantidad de Pasajeros */}
           <Col md={3}>
             <Form.Group>
-              <Form.Label>Cantidad Pasajeros</Form.Label>
+              <Form.Label>Cantidad Pasajeross</Form.Label>
               <div className="input-group">
                 <Form.Control type="number" defaultValue="8" min="1" />
                 <span className="input-group-text"><FaUser /></span>

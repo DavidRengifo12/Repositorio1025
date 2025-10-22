@@ -43,7 +43,7 @@ const AdminLayout = () => {
           {/* Cerrar Sesión (al final) */}
           <div className="mt-auto p-3 border-top">
             <Nav.Link as={Link} to="/login" className="text-white">
-              <FaSignOutAlt className="me-2" /> Cerrar Sesión
+              <FaSignOutAlt className="me-2" /> Cerrar Sesións
             </Nav.Link>
           </div>
         </Col>

@@ -10,7 +10,7 @@ const Sidebar = () => {
       {/* Logo/Título */}
       <div className="mb-4">
         {/* <img src="..." alt="Logo" style={{ height: '30px' }} /> */}
-        <h4 className="mt-2 text-center">AdminLink</h4>
+        <h4 className="mt-2 text-center">AdminLinks</h4>
       </div>
 
       {/* Menú Principal */}
