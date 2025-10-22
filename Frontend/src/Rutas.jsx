@@ -8,6 +8,11 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import ToastProvider from "./Components/ToastProvider";
 import { useAuth } from "./context/AuthContext";
+import NavbarUser from "./user/NavbarUser";
+import DashboardContent from "./Admin/DashboardContent";
+import AdminLayout from "./Admin/AdminLayout";
+import StatsCards from "./Admin/StatsCards";
+import Sidebar from "./Admin/Sidebar";
 
 
 
@@ -35,6 +40,11 @@ const RutasWeb = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="/navbar-user" element={<NavbarUser />} ></Route> {/*PROTEGER LAS RUTAS DEL DAHS */}
+      <Route path="/dash-admin" element={<DashboardContent />} />
+      <Route path="/admin-sidebar" element={<AdminLayout />} />
+      <Route path="/cards" element={<StatsCards />} />
+      
 
       {/*Rutas Administrador */}
       <Route path="/dash-admin" element={isAuthenticated && user.rol === "administrador" ? <AdminLayout />: <Navigate to= '/' />}>

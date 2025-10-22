@@ -21,19 +21,20 @@ export default function NavbarUser() {// REAJUSTAR ESTILOS
     <>
       <div>
         <header className='bg-transparent'>
-            <Navbar expand="lg" fixed= "top" className="py-3 bg-success shadow-sm">
+            <Navbar expand="lg" fixed= "top" className="py-3 shadow-sm" style={{ background: '#4E73DF' }}>
               <div className="container">
-                <Navbar.Brand className='text-white'><h4 className='m-0'>Equipos Cómputo</h4></Navbar.Brand>
+                <Navbar.Brand className='text-white'><h4 className='m-0'>AeroLinies</h4></Navbar.Brand>
                 <Navbar.Toggle arial-controls="basic-navbar-nav"></Navbar.Toggle>
 
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='mx-auto gap-3 align-items-center'>
                         {
-                            user?.rol === 'usuario' && (
+                            user?.rol === 'pasajeros' && (
                                 <>
-                                    <Nav.Link as={Link} to='/dash-user/reserva-equipo' className="text-white fw-bold">Alquilar Equipos</Nav.Link>
-                                    <Nav.Link as={Link} to='/dash-user/mis-reservas' className="text-white fw-bold">Mis reservas</Nav.Link>
-                                    <Nav.Link as={Link} to='/dash-user/chat' className="text-white fw-bold">Chat</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/reserva-equipo' className="text-white fw-bold">Vuelos</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/mis-reservas' className="text-white fw-bold">Reservar</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/chat' className="text-white fw-bold">Realizar Pagos</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/chat' className="text-white fw-bold">Lugares</Nav.Link>
                                 </>
                             )
                         }    
