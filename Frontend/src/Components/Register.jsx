@@ -1,60 +1,58 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { Button, Card, Col, Container, Form, Row, InputGroup } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { FiMail, FiPhone, FiLock, FiCalendar, FiUser } from 'react-icons/fi'
-//import { registerUser } from '../services/registerService'
 import supabase from '../Supabase'
+import { FiMail, FiPhone, FiLock, FiCalendar, FiUser } from 'react-icons/fi'
 
 export default function Register() {
-  const [primerApellido, setPrimerApellido] = useState("")
-  const [segundoApellido, setSegundoApellido] = useState("")
-  const [nombres, setNombres] = useState("")
-  const [genero, setGenero] = useState("")
-  const [fechaNacimiento, setFechaNacimiento] = useState("")
-  const [tipoDocumento, setTipoDocumento] = useState("")
-  const [documento, setDocumento] = useState("") 
-  const [telefono, setTelefono] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [rol] = useState("pasajeros")
-
+  const { register, handleSubmit, formState: { errors } } = useForm()
   const navigate = useNavigate()
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
+  const onSubmit = async (data) => {
     try {
-      const {data, error} = await supabase.auth.signUp({
-        email,
-        password,
-        options:{
-          data: {
-            primerApellido,
-            segundoApellido,
-            nombres,
-            genero,
-            fechaNacimiento,
-            tipoDocumento,
-            documento,
-            telefono, 
-            rol
-          }
-        }
+
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
       })
-      console.log(data)
+
+      if (authError) {
+        toast.error('Error al registrarte: ' + authError.message)
+        return
+      }
+
+      // 2️⃣ Insertar datos en tabla usuarios
+      const { error: insertError } = await supabase
+        .from('usuarios')
+        .insert([
+          {
+            id: authData.user.id,
+            primer_apellido: data.primerApellido,
+            segundo_apellido: data.segundoApellido,
+            nombres: data.nombres,
+            fecha_nacimiento: data.fechaNacimiento,
+            genero: data.genero,
+            tipo_documento: data.tipoDocumento,
+            documento: data.documento,
+            telefono: data.telefono,
+            rol: 'pasajeros'
+          }
+        ])
+
+      if (insertError) {
+        toast.error('Error guardando datos adicionales')
+        console.error(insertError)
+        return
+      }
+
+      toast.success('Registro exitoso')
+      navigate('/')
+    } catch (error) {
       console.error(error)
-      if(error){
-        toast.error('Error al registrarte, intenta de nuevo')
-      }
-      if(data.user){
-        toast.success('registro exitoso')
-        navigate('/')
-      }
-    }catch(error){
-      console.log('error al registrarse', error)
-      toast.error('Ocurrio un error al registrarte, intenta de nuevo')
+      toast.error('Ocurrió un error al registrarte')
     }
-    
   }
 
   return (
@@ -65,44 +63,37 @@ export default function Register() {
             <Card className='shadow border-0 rounded-4 p-4'>
               <Card.Body>
                 <h2 className='text-center fw-bold mb-4'>Registro de Usuario</h2>
-
-                <Form onSubmit={handleRegister}>
+                <Form onSubmit={handleSubmit(onSubmit)}>
                   <Row>
-                    {/* Columna Izquierda */}
                     <Col md={6}>
                       <Form.Group className='mb-3'>
                         <Form.Label>Primer Apellido</Form.Label>
                         <Form.Control
+                          {...register('primerApellido', { required: true })}
                           type='text'
                           placeholder='Ingrese su primer apellido'
-                          value={primerApellido}
-                          onChange={(e) => setPrimerApellido(e.target.value)}
-                          required
                         />
+                        {errors.primerApellido && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
                         <Form.Label>Nombres</Form.Label>
                         <Form.Control
+                          {...register('nombres', { required: true })}
                           type='text'
                           placeholder='Ingrese sus nombres'
-                          value={nombres}
-                          onChange={(e) => setNombres(e.target.value)}
-                          required
                         />
+                        {errors.nombres && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
                         <Form.Label>Género</Form.Label>
-                        <Form.Select
-                          value={genero}
-                          onChange={(e) => setGenero(e.target.value)}
-                          required
-                        >
+                        <Form.Select {...register('genero', { required: true })}>
                           <option value=''>Seleccione su género</option>
                           <option value='Masculino'>Masculino</option>
-                          <option value='Femenino'>Femenino</option>              
+                          <option value='Femenino'>Femenino</option>
                         </Form.Select>
+                        {errors.genero && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
@@ -110,13 +101,12 @@ export default function Register() {
                         <InputGroup>
                           <InputGroup.Text><FiPhone /></InputGroup.Text>
                           <Form.Control
+                            {...register('telefono', { required: true })}
                             type='text'
-                            placeholder='Ingrese su número de teléfono'
-                            value={telefono}
-                            onChange={(e) => setTelefono(e.target.value)}
-                            required
+                            placeholder='Ingrese su teléfono'
                           />
                         </InputGroup>
+                        {errors.telefono && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
@@ -124,27 +114,24 @@ export default function Register() {
                         <InputGroup>
                           <InputGroup.Text><FiMail /></InputGroup.Text>
                           <Form.Control
+                            {...register('email', { required: true })}
                             type='email'
-                            placeholder='Ingrese su correo electrónico'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
+                            placeholder='Ingrese su correo'
                           />
                         </InputGroup>
+                        {errors.email && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
                     </Col>
 
-                    {/* Columna Derecha */}
                     <Col md={6}>
                       <Form.Group className='mb-3'>
                         <Form.Label>Segundo Apellido</Form.Label>
                         <Form.Control
+                          {...register('segundoApellido', { required: true })}
                           type='text'
                           placeholder='Ingrese su segundo apellido'
-                          value={segundoApellido}
-                          onChange={(e) => setSegundoApellido(e.target.value)}
-                          required
                         />
+                        {errors.segundoApellido && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
@@ -152,26 +139,22 @@ export default function Register() {
                         <InputGroup>
                           <InputGroup.Text><FiCalendar /></InputGroup.Text>
                           <Form.Control
+                            {...register('fechaNacimiento', { required: true })}
                             type='date'
-                            value={fechaNacimiento}
-                            onChange={(e) => setFechaNacimiento(e.target.value)}
-                            required
                           />
                         </InputGroup>
+                        {errors.fechaNacimiento && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
                         <Form.Label>Tipo Documento</Form.Label>
-                        <Form.Select
-                          value={tipoDocumento}
-                          onChange={(e) => setTipoDocumento(e.target.value)}
-                          required
-                        >
+                        <Form.Select {...register('tipoDocumento', { required: true })}>
                           <option value=''>Seleccione el tipo de documento</option>
-                          <option value='C.C'>Cédula de ciudadanía</option>
-                          <option value='T.I'>Tarjeta de identidad</option>
-                          <option value='C.E'>Cédula de extranjería</option>
+                          <option value='Cedula ciudadania'>Cédula de ciudadanía</option>
+                          <option value='Tarjeta Identidad'>Tarjeta de identidad</option>
+                          <option value='Cedula extranjera'>Cédula de extranjería</option>
                         </Form.Select>
+                        {errors.tipoDocumento && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-3'>
@@ -179,13 +162,12 @@ export default function Register() {
                         <InputGroup>
                           <InputGroup.Text><FiUser /></InputGroup.Text>
                           <Form.Control
+                            {...register('documento', { required: true })}
                             type='text'
                             placeholder='Ingrese su documento'
-                            value={documento}
-                            onChange={(e) => setDocumento(e.target.value)}
-                            required
                           />
                         </InputGroup>
+                        {errors.documento && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
 
                       <Form.Group className='mb-4'>
@@ -193,40 +175,25 @@ export default function Register() {
                         <InputGroup>
                           <InputGroup.Text><FiLock /></InputGroup.Text>
                           <Form.Control
+                            {...register('password', { required: true })}
                             type='password'
                             placeholder='••••••••'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
                           />
                         </InputGroup>
+                        {errors.password && <small className='text-danger'>Campo obligatorio</small>}
                       </Form.Group>
-
-                      
                     </Col>
                   </Row>
 
-                 
-                  {/* Botón */}
                   <div className='text-center'>
-                    <Button
-                      type='submit'
-                      size='lg'
-                      className='px-5 rounded-pill'
-                      style={{ background: '#4E73DF', border: 'none' }}
-                    >
+                    <Button type='submit' size='lg' className='px-5 rounded-pill' style={{ background: '#4E73DF', border: 'none' }}>
                       Registrarme
                     </Button>
                   </div>
 
-                  {/* Enlace */}
                   <div className='text-center mt-3'>
                     Ya tienes cuenta?{" "}
-                    <Link
-                      to='/login'
-                      className='fw-semibold text-decoration-none'
-                      style={{ color: '#4E73DF' }}
-                    >
+                    <Link to='/login' className='fw-semibold text-decoration-none' style={{ color: '#4E73DF' }}>
                       Iniciar sesión
                     </Link>
                   </div>
