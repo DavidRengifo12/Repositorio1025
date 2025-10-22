@@ -16,13 +16,13 @@ const LandingPage = () => {
               style={{
                 width: '32px',
                 height: '32px',
-                backgroundColor: '#4CAF50',
+                backgroundColor: '#4E73DF',
                 borderRadius: '6px'
               }}
             >
               <i className="fas fa-leaf text-white"></i>
             </div>
-            <span className="fw-bold fs-4" style={{ color: '#2E2E2E' }}>TechPlatform</span>
+            <span className="fw-bold fs-4" style={{ color: '#2E2E2E' }}>AirLines</span>
           </div>
           
           <div className="navbar-nav d-none d-lg-flex flex-row me-auto ms-5">
@@ -36,7 +36,7 @@ const LandingPage = () => {
               onClick={() => navigate('/')}
               variant="link"
               className="text-decoration-none fw-medium"
-              style={{ color: '#4CAF50' }}
+              style={{ color: '#4E73DF' }}
             >
               Login
             </Button>
@@ -44,7 +44,7 @@ const LandingPage = () => {
               onClick={() => navigate('/')}
               className="px-4 py-2 fw-medium"
               style={{
-                backgroundColor: '#4CAF50',
+                backgroundColor: '#4E73DF',
                 border: 'none',
                 borderRadius: '6px'
               }}
@@ -61,7 +61,7 @@ const LandingPage = () => {
           <Row className="align-items-center min-vh-75">
             <Col lg={6} className="pe-lg-5">
               <h1 className="display-4 fw-bold mb-4" style={{ color: '#2E2E2E' }}>
-                Reserva los mejores <span style={{ color: '#4CAF50' }}>computadores</span> con nosotros
+                Reserva los mejores <span style={{ color: '#4E73DF' }}>computadores</span> con nosotros
               </h1>
               <p className="fs-5 text-muted mb-4">
                 Has reservas de manera facil, rapida y segura.
@@ -70,7 +70,7 @@ const LandingPage = () => {
                 onClick={() => navigate('/register')}
                 className="px-4 py-3 fw-medium"
                 style={{
-                  backgroundColor: '#4CAF50',
+                  backgroundColor: '#4E73DF',
                   border: 'none',
                   borderRadius: '6px',
                   fontSize: '1.1rem'
@@ -119,7 +119,7 @@ const LandingPage = () => {
                       backgroundColor: '#E8F5E8'
                     }}
                   >
-                    <i className="fas fa-users fa-2x" style={{ color: '#4CAF50' }}></i>
+                    <i className="fas fa-users fa-2x" style={{ color: '#4E73DF' }}></i>
                   </div>
                 </div>
                 <Card.Body className="p-0">
@@ -209,7 +209,7 @@ const LandingPage = () => {
               <Button
                 className="px-4 py-2 fw-medium"
                 style={{
-                  backgroundColor: '#4CAF50',
+                  backgroundColor: '#4E73DF',
                   border: 'none',
                   borderRadius: '6px'
                 }}
@@ -227,7 +227,7 @@ const LandingPage = () => {
           <Row className="align-items-center">
             <Col lg={6}>
               <h2 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>
-                Impulsando el <span style={{ color: '#4CAF50' }}>crecimiento empresarial</span>
+                Impulsando el <span style={{ color: '#4E73DF' }}>crecimiento empresarial</span>
               </h2>
               <p className="text-muted mb-4">Resultados que hablan por sí solos gracias a nuestro compromiso con la excelencia</p>
             </Col>
@@ -305,7 +305,7 @@ const LandingPage = () => {
               <Button
                 className="px-4 py-2 fw-medium"
                 style={{
-                  backgroundColor: '#4CAF50',
+                  backgroundColor: '#4E73DF',
                   border: 'none',
                   borderRadius: '6px'
                 }}
@@ -327,7 +327,7 @@ const LandingPage = () => {
             <Button
               className="px-5 py-3 fw-medium"
               style={{
-                backgroundColor: '#4CAF50',
+                backgroundColor: '#4E73DF',
                 border: 'none',
                 borderRadius: '6px',
                 fontSize: '1.1rem'
@@ -350,7 +350,7 @@ const LandingPage = () => {
                   style={{
                     width: '32px',
                     height: '32px',
-                    backgroundColor: '#4CAF50',
+                    backgroundColor: '#4E73DF',
                     borderRadius: '6px'
                   }}
                 >
@@ -358,22 +358,22 @@ const LandingPage = () => {
                 </div>
                 <span className="fw-bold fs-5">TechPlatform</span>
               </div>
-              <p className="text-muted small mt-2 mb-0">Copyright © 2024 TechPlatform ltd.</p>
+              <p className="text-white small mt-2 mb-0">Copyright © 2024 TechPlatform ltd.</p>
             </Col>
             <Col md={3}>
               <h6 className="text-white fw-bold mb-2">Empresa</h6>
               <div className="d-flex flex-column">
-                <a href="#" className="text-muted text-decoration-none small mb-1">Acerca de nosotros</a>
-                <a href="#" className="text-muted text-decoration-none small mb-1">Carreras</a>
-                <a href="#" className="text-muted text-decoration-none small">Blog</a>
+                <a href="#" className="text-white text-decoration-none small mb-1">Acerca de nosotros</a>
+                <a href="#" className="text-white text-decoration-none small mb-1">Carreras</a>
+                <a href="#" className="text-white text-decoration-none small">Blog</a>
               </div>
             </Col>
             <Col md={3}>
               <h6 className="text-white fw-bold mb-2">Soporte</h6>
               <div className="d-flex flex-column">
-                <a href="#" className="text-muted text-decoration-none small mb-1">Términos de servicio</a>
-                <a href="#" className="text-muted text-decoration-none small mb-1">Política de privacidad</a>
-                <a href="#" className="text-muted text-decoration-none small">Centro de ayuda</a>
+                <a href="#" className="text-white text-decoration-none small mb-1">Términos de servicio</a>
+                <a href="#" className="text-white text-decoration-none small mb-1">Política de privacidad</a>
+                <a href="#" className="text-white text-decoration-none small">Centro de ayuda</a>
               </div>
             </Col>
           </Row>

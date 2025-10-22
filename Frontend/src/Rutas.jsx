@@ -1,11 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 
-import ToastProvider from "./components/ToastProvider";
+
 
 import LandingPage from "./LandingPage";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import ToastProvider from "./Components/ToastProvider";
 
 
 

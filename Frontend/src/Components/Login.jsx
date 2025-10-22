@@ -97,12 +97,12 @@ export default function Login() { //REAJUSTAR ESTILOS
                   </Form.Group>
 
                   <div className="d-grid">
-                    <Button type="submit" size='lg' variant='success'>Entrar</Button>
+                    <Button type="submit" size='lg'  style={{background: '#4E73DF'}}>Entrar</Button>
                   </div>
                 </Form>
 
                 <div className='text-center mt-3'>
-                  ¿No tienes cuenta? <Link to="/register" className='text-success text-decoration-none fw-semibold'>Regístrate gratis</Link>
+                  ¿No tienes cuenta? <Link to="/register" className=' text-decoration-none fw-semibold'>Regístrate gratis</Link>
                 </div>
               </Card.Body>
             </Card>
