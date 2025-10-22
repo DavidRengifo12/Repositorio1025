@@ -12,7 +12,10 @@ import NavbarUser from "./user/NavbarUser";
 import DashboardContent from "./Admin/DashboardContent";
 import AdminLayout from "./Admin/AdminLayout";
 import StatsCards from "./Admin/StatsCards";
-import Sidebar from "./Admin/Sidebar";
+import VerReservas from "./Admin/VerReservas";
+import CrearVuelo from "./Admin/CrearVuelo";
+import BuscarVuelos from "./user/BuscarVuelos";
+import SeleccionAsientos from "./user/SeleccionAsientos";
 
 
 
@@ -44,8 +47,10 @@ const RutasWeb = () => {
       <Route path="/dash-admin" element={<DashboardContent />} />
       <Route path="/admin-sidebar" element={<AdminLayout />} />
       <Route path="/cards" element={<StatsCards />} />
-      
-
+      <Route path="/reservas" element={<VerReservas />} />
+      <Route path="/crear-vuelo" element={<CrearVuelo />} />
+      <Route path="/buscar-vuelos" element={<BuscarVuelos />}/>
+      <Route path="/seleccion-asientos" element={<SeleccionAsientos />} />
       {/*Rutas Administrador */}
       <Route path="/dash-admin" element={isAuthenticated && user.rol === "administrador" ? <AdminLayout />: <Navigate to= '/' />}>
          {/* <Route index element={<Navigate to="equipo-computo" replace />} />
@@ -55,7 +60,7 @@ const RutasWeb = () => {
       </Route>
 
       {/*Rutas Usuario */}
-      <Route path="/dash-user" element={isAuthenticated && user.rol === 'usuario' ? <NavbarR /> : <Navigate to='/' />}>
+      <Route path="/dash-user" element={isAuthenticated && user.rol === 'usuario' ? <NavbarUser /> : <Navigate to='/' />}>
         {/* <Route index element={<Navigate to="reserva-equipo" replace />} />
         <Route path="reserva-equipo" element={<ReservaEquipo />} />
         <Route path="mis-reservas" element={<MisReservas />} />
