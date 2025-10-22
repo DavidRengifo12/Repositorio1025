@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Row, Col, Button, Card } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { FaArrowCircleUp } from "react-icons/fa";
 
 const LandingPage = () => {
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ const LandingPage = () => {
 
           <div className="d-flex gap-2">
             <Button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login')}
               variant="link"
               className="text-decoration-none fw-medium"
               style={{ color: '#4E73DF' }}
@@ -41,7 +42,7 @@ const LandingPage = () => {
               Login
             </Button>
             <Button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/register')}
               className="px-4 py-2 fw-medium"
               style={{
                 backgroundColor: '#4E73DF',
@@ -61,7 +62,7 @@ const LandingPage = () => {
           <Row className="align-items-center min-vh-75">
             <Col lg={6} className="pe-lg-5">
               <h1 className="display-4 fw-bold mb-4" style={{ color: '#2E2E2E' }}>
-                Reserva los mejores <span style={{ color: '#4E73DF' }}>computadores</span> con nosotros
+                Reserva los mejores <span style={{ color: '#4E73DF' }}>vuelos</span> con nosotros
               </h1>
               <p className="fs-5 text-muted mb-4">
                 Has reservas de manera facil, rapida y segura.
@@ -82,7 +83,7 @@ const LandingPage = () => {
             <Col lg={6} className="text-center">
               <div className="position-relative">
                 <img
-                  src="https://cdn.pixabay.com/photo/2020/01/26/20/14/computer-4795762_1280.jpg"
+                  src="avion2.jpg"
                   alt="Profesionales trabajando"
                   className="img-fluid rounded-3"
                   style={{
@@ -388,7 +389,7 @@ const LandingPage = () => {
           className="rounded-circle"
           style={{ width: '50px', height: '50px' }}
         >
-          <i className="fas fa-arrow-left"></i>
+          <i className="fas fa-arrow-left"><FaArrowCircleUp /></i>
         </Button>
       </div>
     </div>
