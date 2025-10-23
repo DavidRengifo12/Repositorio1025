@@ -14,21 +14,30 @@ export default function Register() {
     try {
 
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-      })
+      email: data.email,
+      password: data.password,
+    })
 
-      if (authError) {
-        toast.error('Error al registrarte: ' + authError.message)
-        return
-      }
+    if (authError) {
+      toast.error('Error al registrarte: ' + authError.message)
+      return
+    }
+
+    const user = authData?.user || authData?.session?.user
+    console.log('Usuario obtenido:', user)
+
+    if (!user) {
+      toast.error('No se pudo obtener el usuario')
+      return
+    }
+
 
       // 2️⃣ Insertar datos en tabla usuarios
       const { error: insertError } = await supabase
         .from('usuarios')
         .insert([
           {
-            id: authData.user.id,
+            id: user.id,
             primer_apellido: data.primerApellido,
             segundo_apellido: data.segundoApellido,
             nombres: data.nombres,
