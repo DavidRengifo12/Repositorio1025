@@ -6,7 +6,7 @@ import { FaPlaneDeparture, FaPlus, FaBook, FaSignOutAlt, FaCalendarCheck } from 
 const AdminLayout = () => {
   const location = useLocation();
 
-  // Define los ítems del menú con sus rutas
+  // Definicion de los ítems del menu con sus respectivas rutas
   const navItems = [
     { to: 'dashboard', icon: FaCalendarCheck, label: 'Dashboard' },
     { to: 'crear-vuelo', icon: FaPlus, label: 'Crear Vuelo' },
@@ -32,7 +32,7 @@ const AdminLayout = () => {
                 key={item.to}
                 as={Link}
                 to={item.to}
-                // Aplica 'active' si la ruta actual coincide
+                
                 className={`text-white my-1 ${location.pathname.endsWith(item.to) ? 'bg-dark rounded' : ''}`}
               >
                 <item.icon className="me-2" /> {item.label}
@@ -43,7 +43,7 @@ const AdminLayout = () => {
           {/* Cerrar Sesión (al final) */}
           <div className="mt-auto p-3 border-top">
             <Nav.Link as={Link} to="/login" className="text-white">
-              <FaSignOutAlt className="me-2" /> Cerrar Sesións
+              <FaSignOutAlt className="me-2" /> Cerrar Sesion
             </Nav.Link>
           </div>
         </Col>

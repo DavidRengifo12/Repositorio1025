@@ -19,25 +19,28 @@ export default function Register() {
     })
 
     if (authError) {
+      console.log(authError)
       toast.error('Error al registrarte: ' + authError.message)
       return
     }
 
-    const user = authData?.user || authData?.session?.user
-    console.log('Usuario obtenido:', user)
-
+    const user = authData?.user 
+  
     if (!user) {
       toast.error('No se pudo obtener el usuario')
       return
     }
 
+    console.log(authData)
 
-      // 2️⃣ Insertar datos en tabla usuarios
+    
+
+
       const { error: insertError } = await supabase
         .from('usuarios')
-        .insert([
+        .insert(
           {
-            id: user.id,
+            id:user.id,
             primer_apellido: data.primerApellido,
             segundo_apellido: data.segundoApellido,
             nombres: data.nombres,
@@ -46,9 +49,10 @@ export default function Register() {
             tipo_documento: data.tipoDocumento,
             documento: data.documento,
             telefono: data.telefono,
-            rol: 'pasajeros'
+            rol: 'pasajeros',
+            auth_id: user.id
           }
-        ])
+        )
 
       if (insertError) {
         toast.error('Error guardando datos adicionales')
