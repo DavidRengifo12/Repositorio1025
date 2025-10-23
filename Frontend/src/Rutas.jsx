@@ -14,6 +14,8 @@ import BuscarVuelos from "./user/BuscarVuelos";
 import SeleccionAsientos from "./user/SeleccionAsientos";
 import { Authprovider, useAuth } from "./context/AuthContext";
 import GestionarVuelos from "./Admin/Gestionarvuelos";
+import ComprasUser from "./user/ComprasUser";
+import ReservasUser from "./user/ReservasUser";
 
 const Rutas = () => {
   return (
@@ -53,7 +55,8 @@ const RutasWeb = () => {
         
         <Route path="buscar-vuelos" element={<BuscarVuelos />}></Route>
         <Route path="seleccion-asientos" element={<SeleccionAsientos />}></Route>
-
+        <Route path="compras-tickets" element={<ComprasUser />}></Route>
+        <Route path="reservar-silla" element={<ReservasUser />}></Route>
       </Route>
     </Routes>
   );

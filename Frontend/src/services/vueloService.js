@@ -77,7 +77,7 @@ export const getFlightsByDateRange = async () => {
   return data
 }
 
-// ✅ Filtra vuelos por origen y destino
+// Filtra vuelos por origen y destino
 export const getFlightsFilter = async (origin, destination) => {
   const { data, error } = await supabase
     .from('vuelos')

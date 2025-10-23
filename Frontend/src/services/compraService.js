@@ -1,30 +1,56 @@
+// services/compraService.js
 import supabase from "../Supabase"
 
-// Pasajero crea una compra
-export const crearCompra = async (compra) => {
-  const { data, error } = await supabase
-    .from("compras")
-    .insert([compra])
-    .select()
+// Servicio que obtiene el precio real del vuelo asociado a una reserva
+export const obtenerPrecioPorReserva = async (reservaId) => {
+  const { data: reserva, error: errRes } = await supabase
+    .from("reservas")
+    .select("vuelo_id")
+    .eq("id", reservaId)
     .single()
-  if (error) throw error
-  return data
+  if (errRes) throw errRes
+
+  const { data: vuelo, error: errVuelo } = await supabase
+    .from("vuelos")
+    .select("precio_vuelo")
+    .eq("id", reserva.vuelo_id)
+    .single()
+  if (errVuelo) throw errVuelo
+
+  return vuelo.precio_vuelo
 }
 
-// Pasajero ve sus compras
-export const getComprasUsuario = async (userId) => {
-  const { data, error } = await supabase
-    .from("compras")
-    .select("*")
-    .eq("usuario_pagador_id", userId)
-    .order("fecha_compra", { ascending: false })
-  if (error) throw error
-  return data
-}
+//Crea una compra ya vinculada al usuario y reserva
+export const crearCompra = async ({ reservaId, metodo_pago }) => {
+  try {
+    const { data: user } = await supabase.auth.getUser()
+    const usuario_pagador_id = user?.user?.id
+    if (!usuario_pagador_id) throw new Error("Usuario no autenticado")
 
-// Admin ve todas las compras
-export const getTodasLasCompras = async () => {
-  const { data, error } = await supabase.from("compras").select("*")
-  if (error) throw error
-  return data
+    const precio = await obtenerPrecioPorReserva(reservaId)
+
+    const codigo_compra = Math.random().toString(36).substring(2, 10).toUpperCase()
+
+    const { data, error } = await supabase
+      .from("compras")
+      .insert([
+        {
+          codigo_compra,
+          usuario_pagador_id,
+          total: precio,
+          metodo_pago,
+          estado_pago: "Pendiente",
+        },
+      ])
+      .select()
+      .single()
+    if (error) throw error
+
+    await supabase.from("reservas").update({ compra_id: data.id }).eq("id", reservaId)
+
+    return data
+  } catch (err) {
+    console.error(" Error creando compra:", err)
+    throw err
+  }
 }

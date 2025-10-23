@@ -1,17 +1,18 @@
 import supabase from "../Supabase"
 
-// ✅ Obtiene todas las reservas
-export const getReservations = async () => {
+// Obtiene todas las reservas
+export const getReservations = async ({userId}) => {
   const { data, error } = await supabase
     .from('reservas')
     .select('*')
-    .order('fecha_reserva')
+    .eq('usuario_id',userId )
+    .order('fecha_reserva', {ascending:false})
 
   if (error) throw error
   return data
 }
 
-// ✅ Crea una nueva reserva
+// Crea una nueva reserva
 export const postNewReservation = async (newReservation) => {
   const { data, error } = await supabase
     .from('reservas')
@@ -23,7 +24,7 @@ export const postNewReservation = async (newReservation) => {
   return data
 }
 
-// ✅ Actualiza una reserva
+// Actualiza una reserva
 export const updateReservation = async (id, updates) => {
   const { data, error } = await supabase
     .from('reservas')
@@ -35,7 +36,7 @@ export const updateReservation = async (id, updates) => {
   return data
 }
 
-// ✅ Elimina una reserva
+// Elimina una reserva
 export const deleteReservation = async (id) => {
   const { data, error } = await supabase
     .from('reservas')
