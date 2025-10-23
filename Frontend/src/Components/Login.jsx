@@ -1,60 +1,60 @@
 import React, { useState } from 'react'
 import { Card, Col, Container, Form, Row, Button, InputGroup } from 'react-bootstrap'
-import { Link, } from 'react-router-dom'
-// import supabase from '../Supabase'
-// import toast from 'react-hot-toast'
+import { Link, useNavigate, } from 'react-router-dom'
+import supabase from '../Supabase'
+import toast from 'react-hot-toast'
 import { FiMail, FiLock } from 'react-icons/fi'
 
 export default function Login() { //REAJUSTAR ESTILOS
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    // const navegar = useNavigate()
+    const navegar = useNavigate()
 
-    // const handleLogin = async (e) => {
-    //     e.preventDefault()
-    //     const emailTrim = email.trim()
-    //     const passwordVal = password
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        const emailTrim = email.trim()
+        const passwordVal = password
 
-    //     if (!emailTrim || !passwordVal) {
-    //         toast.error('Email y password son requeridos')
-    //         return
-    //     }
-    //     try {
-    //         const {data, error} = await supabase.auth.signInWithPassword({
-    //         email: emailTrim, 
-    //         password: passwordVal
-    //         })
-    //         if(error){
-    //             toast.error("Datos invalidos del email o password") 
-    //             console.log(error)
-    //             return
-    //         }
+        if (!emailTrim || !passwordVal) {
+            toast.error('Email y password son requeridos')
+            return
+        }
+        try {
+            const {data, error} = await supabase.auth.signInWithPassword({
+            email: emailTrim, 
+            password: passwordVal
+            })
+            if(error){
+                toast.error("Datos invalidos del email o password") 
+                console.log(error)
+                return
+            }
 
-    //         if(data?.user){
-    //             const {data: perfil, error: errorPerfil} = await supabase
-    //             .from('usuarios')
-    //             .select('rol')
-    //             .eq('id', data.user.id)
-    //             .single()
+            if(data?.user){
+                const {data: perfil, error: errorPerfil} = await supabase
+                .from('usuarios')
+                .select('rol')
+                .eq('id', data.user.id)
+                .single()
 
-    //             if(errorPerfil){
-    //                 toast.error('Datos no validos')
-    //             }
+                if(errorPerfil){
+                    toast.error('Datos no validos')
+                }
 
-    //             toast.success('Inicio de sesion exitoso')
+                toast.success('Inicio de sesion exitoso')
 
-    //             if(perfil?.rol === "administrador") {
-    //                 navegar('/dash-admin')
-    //             }else{
-    //                 navegar('/dash-user')
-    //             }
-    //         }
-    //     } catch (error) {
-    //         toast.error("Error con el login")
-    //         console.log(error)
-    //     }
-    // }
+                if(perfil?.rol === "administrador") {
+                    navegar('/dash-admin')
+                }else{
+                    navegar('/dash-user')
+                }
+            }
+        } catch (error) {
+            toast.error("Error con el login")
+            console.log(error)
+        }
+    }
 
   return (
     <div className="min-vh-100 d-flex align-items-center" style={{ background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)' }}>
@@ -69,7 +69,7 @@ export default function Login() { //REAJUSTAR ESTILOS
                 </Card.Title>
               </Card.Header>
               <Card.Body className='px-4 pb-4'>
-                <Form >
+                <Form onSubmit={handleLogin}>
                   <Form.Group className='mb-3'>
                     <Form.Label>Email</Form.Label>
                     <InputGroup>
