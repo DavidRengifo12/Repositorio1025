@@ -31,10 +31,10 @@ export default function NavbarUser() {// REAJUSTAR ESTILOS
                         {
                             user?.rol === 'pasajeros' && (
                                 <>
-                                    <Nav.Link as={Link} to='/dash-user/reserva-equipo' className="text-white fw-bold">Vuelos</Nav.Link>
-                                    <Nav.Link as={Link} to='/dash-user/mis-reservas' className="text-white fw-bold">Reservar</Nav.Link>
-                                    <Nav.Link as={Link} to='/dash-user/chat' className="text-white fw-bold">Realizar Pagos</Nav.Link>
-                                    <Nav.Link as={Link} to='/dash-user/chat' className="text-white fw-bold">Lugares</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/buscar-vuelos' className="text-white fw-bold">Vuelos</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/reservar-silla' className="text-white fw-bold">Reservar</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/compras-tickets' className="text-white fw-bold">Realizar Pago Compra</Nav.Link>
+                                    <Nav.Link as={Link} to='/dash-user/seleccion-asientos' className="text-white fw-bold">Seleccionar Asientos</Nav.Link>
                                 </>
                             )
                         }    

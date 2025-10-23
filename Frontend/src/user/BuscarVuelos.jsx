@@ -1,112 +1,106 @@
-import React from 'react';
-import { Card, Form, Row, Col, Button, Container } from 'react-bootstrap';
-import { FaPlaneDeparture, FaCalendarAlt, FaExchangeAlt, FaUsers } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { getCiudades } from "../services/ciudadService";
+import { getFlightsFilter } from "../services/vueloService";
+import { Button, Form, Table } from "react-bootstrap";
+import toast from "react-hot-toast";
 
-const BuscarVuelos = () => {
-    // La lógica de estado para el formulario de búsqueda iría aquí.
+export default function BuscarVuelos({ onSelectFlight }) {
+  const [ciudades, setCiudades] = useState([]);
+  const [origen, setOrigen] = useState("");
+  const [destino, setDestino] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [vuelos, setVuelos] = useState([]);
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        // Lógica para realizar la consulta de vuelos a la API
-        console.log("Realizando búsqueda de vuelos...");
-        // Tras buscar, se debería renderizar una tabla de resultados (ListaVuelos.jsx)
-    };
+  useEffect(() => {
+    getCiudades().then(setCiudades).catch(() => toast.error("Error cargando ciudades"));
+  }, []);
 
-    // Define la fecha mínima (hoy) y máxima (dos meses adelante) según el reto
-    const today = new Date().toISOString().split('T')[0];
-    const twoMonthsLater = new Date();
-    twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
-    const maxDate = twoMonthsLater.toISOString().split('T')[0];
+  const handleBuscar = async (e) => {
+    e.preventDefault();
+    if (!origen || !destino || !fecha) {
+      toast.error("Completa todos los campos");
+      return;
+    }
 
-    return (
-        <Container className="my-5">
-            <h2 className="mb-4">✈️ Busca tu próximo vuelo</h2>
-            <Card className="shadow-lg p-4 border-0">
-                <Form onSubmit={handleFormSubmit}>
-                    <Row className="mb-4">
-                        {/* Tipo de Viaje */}
-                        <Col md={12} className="mb-3">
-                            <Form.Group>
-                                <Form.Label className='fw-bold'>Tipo de Viaje</Form.Label>
-                                <div className="d-flex gap-4">
-                                    <Form.Check
-                                        type="radio"
-                                        id="idaYVuelta"
-                                        label="Ida y Regreso"
-                                        name="tipoViaje"
-                                        defaultChecked
-                                    />
-                                    <Form.Check
-                                        type="radio"
-                                        id="soloIda"
-                                        label="Solo Ida"
-                                        name="tipoViaje"
-                                    />
-                                </div>
-                            </Form.Group>
-                        </Col>
+    try {
+      const data = await getFlightsFilter(origen, destino);
+      if (data.length === 0) toast("No hay vuelos disponibles");
+      setVuelos(data);
+    } catch (error) {
+      toast.error("Error al buscar vuelos", error);
+    }
+  };
 
-                        {/* Origen y Destino con Autocompletado */}
-                        <Col md={6}>
-                            <Form.Group controlId="origen" className="mb-3">
-                                <Form.Label><FaPlaneDeparture /> Origen</Form.Label>
-                                {/* Nota: Para el autocompletado, usarías un componente externo como react-select */}
-                                <Form.Control type="text" placeholder="Ciudad de Origen" required />
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Form.Group controlId="destino" className="mb-3">
-                                <Form.Label><FaExchangeAlt /> Destino</Form.Label>
-                                <Form.Control type="text" placeholder="Ciudad de Destino" required />
-                            </Form.Group>
-                        </Col>
+  return (
+    <div className="container mt-4">
+      <h3 className="mb-4">Buscar vuelos ✈️</h3>
 
-                        {/* Fechas */}
-                        <Col md={4}>
-                            <Form.Group controlId="fechaSalida" className="mb-3">
-                                <Form.Label><FaCalendarAlt /> Fecha de Salida</Form.Label>
-                                <Form.Control 
-                                    type="date" 
-                                    required 
-                                    min={today}
-                                    max={maxDate}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col md={4}>
-                            <Form.Group controlId="fechaRegreso" className="mb-3">
-                                <Form.Label><FaCalendarAlt /> Fecha de Regreso (Opcional)</Form.Label>
-                                <Form.Control 
-                                    type="date" 
-                                    min={today}
-                                    max={maxDate}
-                                />
-                            </Form.Group>
-                        </Col>
-                        
-                        {/* Pasajeros */}
-                        <Col md={4}>
-                            <Form.Group controlId="pasajeros" className="mb-3">
-                                <Form.Label><FaUsers /> Pasajeros</Form.Label>
-                                <Form.Control type="number" min="1" max="5" defaultValue="1" required />
-                                <Form.Text className="text-muted">Máximo 5 pasajeros por compra.</Form.Text>
-                            </Form.Group>
-                        </Col>
-                    </Row>
+      <Form onSubmit={handleBuscar} className="row g-3">
+        <Form.Group className="col-md-4">
+          <Form.Label>Origen</Form.Label>
+          <Form.Select value={origen} onChange={(e) => setOrigen(e.target.value)}>
+            <option value="">Seleccionar...</option>
+            {ciudades.map((c) => (
+              <option key={c.id} value={c.id}>{c.nombre}</option>
+            ))}
+          </Form.Select>
+        </Form.Group>
 
-                    <div className="d-grid gap-2">
-                        <Button variant="primary" type="submit" size="lg">
-                            Buscar Vuelos Disponibles
-                        </Button>
-                    </div>
-                </Form>
-            </Card>
+        <Form.Group className="col-md-4">
+          <Form.Label>Destino</Form.Label>
+          <Form.Select value={destino} onChange={(e) => setDestino(e.target.value)}>
+            <option value="">Seleccionar...</option>
+            {ciudades.map((c) => (
+              <option key={c.id} value={c.id}>{c.nombre}</option>
+            ))}
+          </Form.Select>
+        </Form.Group>
 
-            {/* Aquí iría el componente de resultados (ListaVuelos.jsx) */}
-            {/* <ListaVuelos /> */}
+        <Form.Group className="col-md-3">
+          <Form.Label>Fecha salida</Form.Label>
+          <Form.Control
+            type="date"
+            value={fecha}
+            onChange={(e) => setFecha(e.target.value)}
+          />
+        </Form.Group>
 
-        </Container>
-    );
-};
+        <div className="col-md-1 d-flex align-items-end">
+          <Button type="submit" className="w-100">Buscar</Button>
+        </div>
+      </Form>
 
-export default BuscarVuelos;
+      {vuelos.length > 0 && (
+        <Table striped bordered hover className="mt-4 text-center">
+          <thead>
+            <tr>
+              <th>Número vuelo</th>
+              <th>Precio</th>
+              <th>Fecha salida</th>
+              <th>Hora salida</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vuelos.map((v) => (
+              <tr key={v.id}>
+                <td>{v.numero_vuelo}</td>
+                <td>${Number(v.precio_vuelo).toLocaleString("es-CO")}</td>
+                <td>{v.fecha_salida}</td>
+                <td>{new Date(v.hora_salida).toLocaleTimeString()}</td>
+                <td>
+                  <Button
+                    variant="success"
+                    onClick={() => onSelectFlight(v)}
+                  >
+                    Seleccionar
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </div>
+  );
+}
