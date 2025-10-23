@@ -12,24 +12,24 @@ const LandingPage = () => {
       <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
         <Container>
           <div className="navbar-brand d-flex align-items-center">
-            <div 
-              className="me-2 d-flex align-items-center justify-content-center"
-              style={{
-                width: '32px',
-                height: '32px',
-                backgroundColor: '#4E73DF',
-                borderRadius: '6px'
-              }}
-            >
-              <i className="fas fa-leaf text-white"></i>
-            </div>
+            <img
+            src="/Airlines.png" 
+            alt="Logo"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '6px',
+              objectFit: 'cover'
+            }}
+          />
+
             <span className="fw-bold fs-4" style={{ color: '#2E2E2E' }}>AirLines</span>
           </div>
           
           <div className="navbar-nav d-none d-lg-flex flex-row me-auto ms-5">
-            <a className="nav-link px-3 fw-medium" href="#" style={{ color: '#2E2E2E' }}>Inicio</a>
-            <a className="nav-link px-3 fw-medium" href="#" style={{ color: '#717171' }}>Servicios</a>
-            <a className="nav-link px-3 fw-medium" href="#" style={{ color: '#717171' }}>Contacto</a>
+            <a className="nav-link px-3 fw-medium" href="#inicio" style={{ color: '#2E2E2E' }}>Inicio</a>
+            <a className="nav-link px-3 fw-medium" href="#servicios" style={{ color: '#717171' }}>Servicios</a>
+            <a className="nav-link px-3 fw-medium" href="#contacto" style={{ color: '#717171' }}>Contacto</a>
           </div>
 
           <div className="d-flex gap-2">
@@ -39,7 +39,7 @@ const LandingPage = () => {
               className="text-decoration-none fw-medium"
               style={{ color: '#4E73DF' }}
             >
-              Login
+              Iniciar sesion
             </Button>
             <Button
               onClick={() => navigate('/register')}
@@ -50,14 +50,14 @@ const LandingPage = () => {
                 borderRadius: '6px'
               }}
             >
-              Sign up
+              Registrarse
             </Button>
           </div>
         </Container>
       </nav>
 
       {/* Hero Section */}
-      <section className="py-5" style={{ backgroundColor: '#F5F7FA' }}>
+      <section id="incio" className="py-5"  style={{ backgroundColor: '#F5F7FA' }}>
         <Container>
           <Row className="align-items-center min-vh-75">
             <Col lg={6} className="pe-lg-5">
@@ -99,13 +99,13 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-5">
+      <section id="servicios" className="py-5">
         <Container>
           <div className="text-center mb-5">
             <h2 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>
-              Gestiona todo tu negocio desde una sola plataforma
+              Gestiona todos tus vuelos desde una sola plataforma
             </h2>
-            <p className="text-muted">Soluciones integrales para empresas modernas que buscan eficiencia y crecimiento</p>
+            <p className="text-muted">Soluciones optimas para aerolineas que buscan mejorar sus procesos y servicios de viaje.</p>
           </div>
           
           <Row className="g-4">
@@ -117,7 +117,7 @@ const LandingPage = () => {
                     style={{
                       width: '80px',
                       height: '80px',
-                      backgroundColor: '#E8F5E8'
+                      backgroundColor: 'transparent'
                     }}
                   >
                     <i className="fas fa-users fa-2x" style={{ color: '#4E73DF' }}></i>
@@ -126,7 +126,7 @@ const LandingPage = () => {
                 <Card.Body className="p-0">
                   <h5 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>Gestión de Usuarios</h5>
                   <p className="text-muted small">
-                    Sistema completo de administración de usuarios con automatización de procesos y pagos
+                 Sistema completo de gestión de pasajeros con automatización de procesos, reservas y pagos.
                   </p>
                 </Card.Body>
               </Card>
@@ -140,16 +140,16 @@ const LandingPage = () => {
                     style={{
                       width: '80px',
                       height: '80px',
-                      backgroundColor: '#E8F5E8'
+                      backgroundColor: 'transparent'
                     }}
                   >
                     <i className="fas fa-building fa-2x" style={{ color: '#4CAF50' }}></i>
                   </div>
                 </div>
                 <Card.Body className="p-0">
-                  <h5 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>Análisis y Reportes</h5>
+                  <h5 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>Dashboard</h5>
                   <p className="text-muted small">
-                    Herramientas avanzadas de análisis para tomar decisiones basadas en datos reales
+                    Gestiona tu negocio con un dashboard interactivo 
                   </p>
                 </Card.Body>
               </Card>
@@ -163,7 +163,7 @@ const LandingPage = () => {
                     style={{
                       width: '80px',
                       height: '80px',
-                      backgroundColor: '#E8F5E8'
+                      backgroundColor: 'transparent'
                     }}
                   >
                     <i className="fas fa-handshake fa-2x" style={{ color: '#4CAF50' }}></i>
@@ -172,7 +172,7 @@ const LandingPage = () => {
                 <Card.Body className="p-0">
                   <h5 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>Colaboración en Equipo</h5>
                   <p className="text-muted small">
-                    Facilita la comunicación y colaboración entre equipos de trabajo distribuidos
+                    Facilitá la comunicación y coordinación entre los equipos operativos, administrativos y de vuelo de la aerolínea.
                   </p>
                 </Card.Body>
               </Card>
@@ -203,9 +203,8 @@ const LandingPage = () => {
                 Seguridad y confiabilidad garantizada
               </h2>
               <p className="text-muted mb-4">
-                Protegemos tu información con los más altos estándares de seguridad. Encriptación de extremo a extremo, 
-                autenticación de dos factores y respaldos automáticos para garantizar que tus datos estén siempre seguros 
-                y disponibles cuando los necesites.
+              Protegemos la información de la aerolínea y de nuestros pasajeros con protocolos confiables que garantizan 
+              el manejo seguro de los datos en todo momento.
               </p>
               <Button
                 className="px-4 py-2 fw-medium"
@@ -215,7 +214,7 @@ const LandingPage = () => {
                   borderRadius: '6px'
                 }}
               >
-                Learn More
+                Aprende más
               </Button>
             </Col>
           </Row>
@@ -228,7 +227,7 @@ const LandingPage = () => {
           <Row className="align-items-center">
             <Col lg={6}>
               <h2 className="fw-bold mb-3" style={{ color: '#2E2E2E' }}>
-                Impulsando el <span style={{ color: '#4E73DF' }}>crecimiento empresarial</span>
+                Impulsando el <span style={{ color: '#4E73DF' }}>crecimiento empresarial de las aerolineas</span>
               </h2>
               <p className="text-muted mb-4">Resultados que hablan por sí solos gracias a nuestro compromiso con la excelencia</p>
             </Col>
@@ -238,8 +237,7 @@ const LandingPage = () => {
                   <div className="d-flex align-items-center">
                     <i className="fas fa-users fa-2x me-3" style={{ color: '#4CAF50' }}></i>
                     <div>
-                      <h4 className="fw-bold mb-0" style={{ color: '#2E2E2E' }}>2,245,341</h4>
-                      <small className="text-muted">Usuarios Activos</small>
+                      <small className="text-muted"><b>Vuelos</b></small>
                     </div>
                   </div>
                 </Col>
@@ -247,8 +245,7 @@ const LandingPage = () => {
                   <div className="d-flex align-items-center">
                     <i className="fas fa-hand-holding-heart fa-2x me-3" style={{ color: '#4CAF50' }}></i>
                     <div>
-                      <h4 className="fw-bold mb-0" style={{ color: '#2E2E2E' }}>46,328</h4>
-                      <small className="text-muted">Empresas</small>
+                      <small className="text-muted"><b>Usuarios</b></small>
                     </div>
                   </div>
                 </Col>
@@ -256,8 +253,7 @@ const LandingPage = () => {
                   <div className="d-flex align-items-center">
                     <i className="fas fa-calendar-check fa-2x me-3" style={{ color: '#4CAF50' }}></i>
                     <div>
-                      <h4 className="fw-bold mb-0" style={{ color: '#2E2E2E' }}>828,867</h4>
-                      <small className="text-muted">Proyectos Completados</small>
+                      <small className="text-muted"><b>Reservas</b></small>
                     </div>
                   </div>
                 </Col>
@@ -265,8 +261,7 @@ const LandingPage = () => {
                   <div className="d-flex align-items-center">
                     <i className="fas fa-credit-card fa-2x me-3" style={{ color: '#4CAF50' }}></i>
                     <div>
-                      <h4 className="fw-bold mb-0" style={{ color: '#2E2E2E' }}>1,926,436</h4>
-                      <small className="text-muted">Transacciones</small>
+                      <small className="text-muted"><b>Seleccion de silla</b></small>
                     </div>
                   </div>
                 </Col>
@@ -298,47 +293,28 @@ const LandingPage = () => {
                 Transparencia y compromiso
               </h2>
               <p className="text-muted mb-4">
-                Creemos en la transparencia total con nuestros usuarios. Nuestras políticas están diseñadas 
-                para proteger tu privacidad y garantizar el mejor servicio posible. Cumplimos con todas las 
-                regulaciones internacionales de protección de datos y mantenemos los más altos estándares 
-                éticos en todas nuestras operaciones.
+             Nos preocupamos por la privacidad de nuestros usuarios. Nuestras políticas
+              buscan proteger tus datos y ofrecer un servicio confiable y transparente.
               </p>
-              <Button
-                className="px-4 py-2 fw-medium"
-                style={{
-                  backgroundColor: '#4E73DF',
-                  border: 'none',
-                  borderRadius: '6px'
-                }}
-              >
-                Conoce más
-              </Button>
             </Col>
           </Row>
         </Container>
       </section>
 
       {/* Contact Section */}
-      <section className="py-5">
-        <Container>
-          <div className="text-center">
-            <h2 className="fw-bold mb-4" style={{ color: '#2E2E2E' }}>
-              ¿Listo para comenzar? Contáctanos
-            </h2>
-            <Button
-              className="px-5 py-3 fw-medium"
-              style={{
-                backgroundColor: '#4E73DF',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '1.1rem'
-              }}
-            >
-              Contáctanos →
-            </Button>
-          </div>
-        </Container>
-      </section>
+     <section id="contacto" className="py-5">
+  <Container>
+    <div className="text-center">
+      <h2 className="fw-bold mb-4" style={{ color: '#2E2E2E' }}>
+        ¡Tu próxima aventura empieza aquí!
+      </h2>
+      <p className="text-muted mb-4">
+        Descubre destinos increíbles y reservá tus vuelos con total facilidad.
+      </p>
+    </div>
+  </Container>
+</section>
+
 
       {/* Footer */}
       <footer className="py-4" style={{ backgroundColor: '#263238' }}>
@@ -346,36 +322,20 @@ const LandingPage = () => {
           <Row className="align-items-center">
             <Col md={6}>
               <div className="d-flex align-items-center text-white">
-                <div 
-                  className="me-2 d-flex align-items-center justify-content-center"
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#4E73DF',
-                    borderRadius: '6px'
-                  }}
-                >
-                  <i className="fas fa-leaf"></i>
-                </div>
-                <span className="fw-bold fs-5">TechPlatform</span>
+              <img
+              src="/Airlines.png"
+              alt="Logo"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '6px',
+                objectFit: 'cover'
+              }}
+            />
+
+                <span className="fw-bold fs-5">Airlines</span>
               </div>
-              <p className="text-white small mt-2 mb-0">Copyright © 2024 TechPlatform ltd.</p>
-            </Col>
-            <Col md={3}>
-              <h6 className="text-white fw-bold mb-2">Empresa</h6>
-              <div className="d-flex flex-column">
-                <a href="#" className="text-white text-decoration-none small mb-1">Acerca de nosotros</a>
-                <a href="#" className="text-white text-decoration-none small mb-1">Carreras</a>
-                <a href="#" className="text-white text-decoration-none small">Blog</a>
-              </div>
-            </Col>
-            <Col md={3}>
-              <h6 className="text-white fw-bold mb-2">Soporte</h6>
-              <div className="d-flex flex-column">
-                <a href="#" className="text-white text-decoration-none small mb-1">Términos de servicio</a>
-                <a href="#" className="text-white text-decoration-none small mb-1">Política de privacidad</a>
-                <a href="#" className="text-white text-decoration-none small">Centro de ayuda</a>
-              </div>
+              <p className="text-white small mt-2 mb-0">Copyright © 2025 Airlines.</p>
             </Col>
           </Row>
         </Container>
@@ -384,7 +344,7 @@ const LandingPage = () => {
       {/* Back to V1 Button */}
       <div className="position-fixed bottom-0 end-0 p-3">
         <Button
-          onClick={() => navigate('/')}
+         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           variant="outline-primary"
           className="rounded-circle"
           style={{ width: '50px', height: '50px' }}
