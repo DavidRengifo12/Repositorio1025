@@ -40,17 +40,26 @@ const RutasWeb = () => {
   
   return(
     <Routes>
+      {/* Rutas no proteger no son necesarias */}
       <Route path="/" element={<LandingPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+
+
+      {/*User Rutas Usuario */}
+      <Route path="/buscar-vuelos" element={<BuscarVuelos />}/>
+      <Route path="/seleccion-asientos" element={<SeleccionAsientos />} />
       <Route path="/navbar-user" element={<NavbarUser />} ></Route> {/*PROTEGER LAS RUTAS DEssL DAHS */}
+
+      {/*Admin Rutas */}
       <Route path="/dash-admin" element={<DashboardContent />} />
       <Route path="/admin-sidebar" element={<AdminLayout />} />
       <Route path="/cards" element={<StatsCards />} />
       <Route path="/reservas" element={<VerReservas />} />
       <Route path="/crear-vuelo" element={<CrearVuelo />} />
-      <Route path="/buscar-vuelos" element={<BuscarVuelos />}/>
-      <Route path="/seleccion-asientos" element={<SeleccionAsientos />} />
+
+
+     
       {/*Rutas Administrador */}
       <Route path="/dash-admin" element={isAuthenticated && user.rol === "administrador" ? <AdminLayout />: <Navigate to= '/' />}>
          {/* <Route index element={<Navigate to="equipo-computo" replace />} />
