@@ -1,75 +1,68 @@
 import supabase from "../Supabase"
 
-
-//Lista los vuelos dispoibles
-export const getFligth = async () => {
-    const {data, error} = await supabase
+//  Lista los vuelos disponibles
+export const getFlights = async () => {
+  const { data, error } = await supabase
     .from('vuelos')
     .select('*')
     .order('numero_vuelo')
 
-    if(error) throw error
-    return data 
+  if (error) throw error
+  return data
 }
 
-
-
-//crea un nuevo vuelo
-export const postNewFlight  = async(newFlight) =>{
-    const {data, error}  = supabase
+// Crea un nuevo vuelo
+export const postNewFlight = async (newFlight) => {
+  const { data, error } = await supabase
     .from('vuelos')
     .insert([newFlight])
     .select()
     .single()
 
-
-    if(error) throw error
-    return data
-
-
+  if (error) throw error
+  return data
 }
 
-//actualiza un vuelo 
-export const updateFlight = async (id, updates ) => {
-    const {data, error} = await supabase
+//  Actualiza un vuelo
+export const updateFlight = async (id, updates) => {
+  const { data, error } = await supabase
     .from('vuelos')
     .update(updates)
     .eq('id', id)
     .select()
 
-    if(error) throw error
-    return data
+  if (error) throw error
+  return data
 }
 
-
-//elimina un vuelo
+//  Elimina un vuelo
 export const deleteFlight = async (id) => {
-    const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('vuelos')
     .delete()
     .eq('id', id)
 
-    if(error) throw error
-    return data
+  if (error) throw error
+  return data
 }
 
-// obtiene los vuelos por tipo de vuelo
-export const getFlightsByType  = async(type_of_trip) => {
-    const {data,error} = await supabase
+//  Obtiene vuelos por tipo de viaje (ida/vuelta)
+export const getFlightsByType = async (type_of_trip) => {
+  const { data, error } = await supabase
     .from('vuelos')
     .select('*')
     .eq('tipo_viaje', type_of_trip)
-    .order('numero_vuelo');
+    .order('numero_vuelo')
 
-  if (error) throw error;
-  return data;
+  if (error) throw error
+  return data
 }
 
-//obtiene los vuelos por fecha
+//  Obtiene vuelos entre fechas (por defecto: hoy → 2 meses)
 export const getFlightsByDateRange = async () => {
   const today = new Date()
   const twoMonths = new Date()
-  twoMonths.setMonth(hoy.getMonth() + 2)
+  twoMonths.setMonth(today.getMonth() + 2) //  corregido “hoy” → “today”
 
   const start = today.toLocaleDateString('en-CA')
   const end = twoMonths.toLocaleDateString('en-CA')
@@ -84,13 +77,14 @@ export const getFlightsByDateRange = async () => {
   return data
 }
 
-//filtra cuidades de destino y origen 
+//  Filtra vuelos por origen y destino
 export const getFlightsFilter = async (origin, destination) => {
   const { data, error } = await supabase
     .from('vuelos')
     .select('*')
     .eq('origen', origin)
     .eq('destino', destination)
+
   if (error) throw error
   return data
 }

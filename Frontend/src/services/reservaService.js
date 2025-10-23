@@ -1,54 +1,47 @@
 import supabase from "../Supabase"
 
-
-
-//obtiene la lista de reservas disponibles
-
+//  Obtiene todas las reservas
 export const getReservations = async () => {
-    const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('reservas')
     .select('*')
     .order('fecha_reserva')
 
-    if(error) throw error
-    return data 
+  if (error) throw error
+  return data
 }
 
-
-
-//crea una nueva reserva 
-export const postNewReservation = async(NewReservation) =>{
-    const {data, error}  = supabase
+//  Crea una nueva reserva
+export const postNewReservation = async (newReservation) => {
+  const { data, error } = await supabase
     .from('reservas')
-    .insert([NewReservation])
+    .insert([newReservation])
     .select()
     .single()
 
-
-    if(error) throw error
-    return data
-
+  if (error) throw error
+  return data
 }
 
-//actualiza una reserva
-export const updateReservartion = async (id, updates ) => {
-    const {data, error} = await supabase
+//  Actualiza una reserva
+export const updateReservation = async (id, updates) => {
+  const { data, error } = await supabase
     .from('reservas')
     .update(updates)
     .eq('id', id)
     .select()
 
-    if(error) throw error
-    return data
+  if (error) throw error
+  return data
 }
 
-//elimina una reserva
+//  Elimina una reserva
 export const deleteReservation = async (id) => {
-    const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('reservas')
     .delete()
     .eq('id', id)
 
-    if(error) throw error
-    return data
+  if (error) throw error
+  return data
 }
